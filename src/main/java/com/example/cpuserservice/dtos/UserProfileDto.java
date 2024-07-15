@@ -10,5 +10,6 @@ public class UserProfileDto {
     private String firstName;
     private String lastName;
     private String phoneNumber;
+    public String address;
     private String profilePictureUrl;
 }

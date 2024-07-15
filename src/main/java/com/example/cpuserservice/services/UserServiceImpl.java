@@ -3,7 +3,8 @@ package com.example.cpuserservice.services;
 import com.example.cpuserservice.dtos.UserRegistrationDto;
 import com.example.cpuserservice.models.User;
 import com.example.cpuserservice.repositories.UserRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,7 +14,12 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
-    private PasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     public User registerNewUser(UserRegistrationDto userRegistrationDto) {
 
@@ -21,7 +27,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(userRegistrationDto.getUsername());
         user.setEmail(userRegistrationDto.getEmail());
 
-        user.setPasswordHash(passwordEncoder.encode(userRegistrationDto.getPassword()));
+        user.setPasswordHash(bCryptPasswordEncoder.encode(userRegistrationDto.getPassword()));
 
         return userRepository.save(user);
     }
@@ -33,4 +39,8 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.findByUsername(username);
     }
+
+
+
+
 }
