@@ -15,6 +15,8 @@ import java.util.Set;
 @Setter
 @EntityListeners(AuditingEntityListener.class)
 public class User extends BaseModel {
+
+    @Column(unique = true, nullable = false)
     private String username;
     @Column(unique = true, nullable = false)
     private String email;
