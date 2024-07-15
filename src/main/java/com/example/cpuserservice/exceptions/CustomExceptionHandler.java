@@ -16,7 +16,7 @@ public class CustomExceptionHandler extends Exception {
     public ResponseEntity<ExceptionDto> handleRuntimeException(RuntimeException ex) {
         ExceptionDto exceptionDto = new ExceptionDto();
         exceptionDto.setMessage(ex.getMessage());
-        exceptionDto.setErrorDetails("User already exists");
+        exceptionDto.setErrorDetails(ex.getCause().getMessage());
         exceptionDto.setTimestamp(LocalDateTime.now());
         return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);
     }
@@ -24,7 +24,7 @@ public class CustomExceptionHandler extends Exception {
     public ResponseEntity<ExceptionDto> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         ExceptionDto exceptionDto = new ExceptionDto();
         exceptionDto.setMessage(ex.getMessage());
-        exceptionDto.setErrorDetails("User already exists");
+        exceptionDto.setErrorDetails(ex.getRootCause().getMessage());
         exceptionDto.setTimestamp(LocalDateTime.now());
         return new ResponseEntity<>(exceptionDto, HttpStatus.CONFLICT);
     }

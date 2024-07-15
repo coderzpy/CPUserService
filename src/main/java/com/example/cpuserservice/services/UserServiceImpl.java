@@ -3,7 +3,8 @@ package com.example.cpuserservice.services;
 import com.example.cpuserservice.dtos.UserRegistrationDto;
 import com.example.cpuserservice.models.User;
 import com.example.cpuserservice.repositories.UserRepository;
-import org.springframework.context.annotation.Bean;
+import jakarta.transaction.Transactional;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +24,19 @@ public class UserServiceImpl implements UserService {
 
     public User registerNewUser(UserRegistrationDto userRegistrationDto) {
 
-        User user = new User();
-        user.setUsername(userRegistrationDto.getUsername());
-        user.setEmail(userRegistrationDto.getEmail());
+        try {
 
-        user.setPasswordHash(bCryptPasswordEncoder.encode(userRegistrationDto.getPassword()));
+            User user = new User();
+            user.setUsername(userRegistrationDto.getUsername());
+            user.setEmail(userRegistrationDto.getEmail());
 
-        return userRepository.save(user);
+            user.setPasswordHash(bCryptPasswordEncoder.encode(userRegistrationDto.getPassword()));
+
+            return userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException("Username or email already exists", e);
+        }
+
     }
     public Optional<User> findUserByEmail(String email) {
 
