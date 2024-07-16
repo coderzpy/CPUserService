@@ -1,6 +1,9 @@
 package com.example.cpuserservice.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -18,8 +21,10 @@ public class User extends BaseModel {
 
     @Column(unique = true, nullable = false)
     private String username;
+
     @Column(unique = true, nullable = false)
     private String email;
+
     @Column(nullable = false)
     private String passwordHash;
 

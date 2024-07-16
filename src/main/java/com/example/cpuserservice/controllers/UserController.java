@@ -4,7 +4,9 @@ import com.example.cpuserservice.exceptions.CustomExceptionHandler;
 import com.example.cpuserservice.dtos.UserRegistrationDto;
 import com.example.cpuserservice.models.User;
 import com.example.cpuserservice.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,7 +20,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody UserRegistrationDto userRegistrationDto) throws CustomExceptionHandler {
+    public ResponseEntity<User> registerUser(@Valid @RequestBody UserRegistrationDto userRegistrationDto) throws CustomExceptionHandler {
+
         User newUser = userService.registerNewUser(userRegistrationDto);
         return ResponseEntity.ok(newUser);
     }
