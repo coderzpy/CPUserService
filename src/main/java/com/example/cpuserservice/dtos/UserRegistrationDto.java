@@ -1,5 +1,6 @@
 package com.example.cpuserservice.dtos;
 
+import com.example.cpuserservice.validations.ValidPasssword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -21,5 +22,6 @@ public class UserRegistrationDto {
 
     @Size(min = 10, message = "Password must be at least 10 characters")
     @NotBlank(message = "Password is required")
+    @ValidPasssword
     private String password;
 }
