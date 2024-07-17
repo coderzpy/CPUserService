@@ -14,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = PasswordConstraintValidator.class)
 @Target({TYPE, FIELD, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-public @interface ValidPasssword {
+public @interface ValidPassword {
 
     String message() default "Must be 8 characters long and combination of uppercase letters, lowercase letters, numbers, special characters.";
     Class<?>[] groups() default {};

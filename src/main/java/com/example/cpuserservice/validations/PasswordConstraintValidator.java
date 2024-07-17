@@ -3,10 +3,10 @@ package com.example.cpuserservice.validations;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class PasswordConstraintValidator implements ConstraintValidator<ValidPasssword, String> {
+public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
 
     @Override
-    public void initialize(ValidPasssword constraintAnnotation) {
+    public void initialize(ValidPassword constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
     }
 
