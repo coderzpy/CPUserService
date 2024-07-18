@@ -3,28 +3,24 @@ package com.example.cpuserservice.services;
 import com.example.cpuserservice.dtos.UserRegistrationDto;
 import com.example.cpuserservice.models.User;
 import com.example.cpuserservice.repositories.UserRepository;
-import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Slf4j
+import static com.example.cpuserservice.mappers.UserMapper.mapToUser;
+
+
 @Service
+@Slf4j
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
-
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userRepository = userRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
+    private UserRepository userRepository;
 
     @Override
     public User registerNewUser(UserRegistrationDto userRegistrationDto) {
@@ -32,11 +28,9 @@ public class UserServiceImpl implements UserService {
         try {
 
             log.info("Attempting to register new user with username: {}", userRegistrationDto.getUsername());
-            User user = new User();
-            user.setUsername(userRegistrationDto.getUsername());
-            user.setEmail(userRegistrationDto.getEmail());
 
-            user.setPasswordHash(bCryptPasswordEncoder.encode(userRegistrationDto.getPassword()));
+            User user = mapToUser(userRegistrationDto, new User());
+
             log.info("Successfully registered new user with username: {}", userRegistrationDto.getUsername());
 
             return userRepository.save(user);
