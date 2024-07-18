@@ -19,7 +19,6 @@ import static com.example.cpuserservice.mappers.UserMapper.mapToUser;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
     private UserRepository userRepository;
 
     @Override
