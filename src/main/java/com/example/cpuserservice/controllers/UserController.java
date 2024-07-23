@@ -1,5 +1,6 @@
 package com.example.cpuserservice.controllers;
 
+import com.example.cpuserservice.dtos.UserRegistrationResponseDto;
 import com.example.cpuserservice.exceptions.CustomExceptionHandler;
 import com.example.cpuserservice.dtos.UserRegistrationDto;
 import com.example.cpuserservice.models.User;
@@ -20,9 +21,9 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@Valid @RequestBody UserRegistrationDto userRegistrationDto) throws CustomExceptionHandler {
+    public ResponseEntity<UserRegistrationResponseDto> registerUser(@Valid @RequestBody UserRegistrationDto userRegistrationDto) throws CustomExceptionHandler {
 
-        User newUser = userService.registerNewUser(userRegistrationDto);
+        UserRegistrationResponseDto newUser = userService.registerNewUser(userRegistrationDto);
         return ResponseEntity.ok(newUser);
     }
 
