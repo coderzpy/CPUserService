@@ -1,9 +1,6 @@
 package com.example.cpuserservice.mappers;
 
-import com.example.cpuserservice.dtos.UserProfileResponseDto;
-import com.example.cpuserservice.dtos.UserRegistrationDto;
-import com.example.cpuserservice.dtos.UserRegistrationResponseDto;
-import com.example.cpuserservice.dtos.UserSignInDto;
+import com.example.cpuserservice.dtos.*;
 import com.example.cpuserservice.models.User;
 import com.example.cpuserservice.models.UserProfile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -43,15 +40,5 @@ public class UserMapper {
         user.setUsername(userSignInDto.getUsername());
         user.setPasswordHash(bCryptPasswordEncoder.encode(userSignInDto.getPassword()));
         return user;
-    }
-
-    public static UserProfileResponseDto mapToUserProfileDto(UserProfile userProfile) {
-        UserProfileResponseDto userProfileResponseDto = new UserProfileResponseDto();
-        userProfileResponseDto.setFirstName(userProfile.getFirstName());
-        userProfileResponseDto.setLastName(userProfile.getLastName());
-        userProfileResponseDto.setProfilePictureUrl(userProfile.getProfielPictureUrl());
-        userProfileResponseDto.setPhoneNumber(String.valueOf(userProfile.getPhoneNumber()));
-
-        return userProfileResponseDto;
     }
 }

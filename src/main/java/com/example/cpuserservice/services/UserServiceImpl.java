@@ -1,9 +1,6 @@
 package com.example.cpuserservice.services;
 
-import com.example.cpuserservice.dtos.UserProfileResponseDto;
-import com.example.cpuserservice.dtos.UserRegistrationDto;
-import com.example.cpuserservice.dtos.UserRegistrationResponseDto;
-import com.example.cpuserservice.dtos.UserSignInDto;
+import com.example.cpuserservice.dtos.*;
 import com.example.cpuserservice.exceptions.UserDoesNotExistException;
 import com.example.cpuserservice.models.User;
 import com.example.cpuserservice.models.UserProfile;
@@ -11,6 +8,7 @@ import com.example.cpuserservice.repositories.UserProfileRepository;
 import com.example.cpuserservice.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.xmlbeans.impl.xb.xsdschema.Attribute;
 import org.mule.runtime.core.api.exception.ResourceNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 import static com.example.cpuserservice.mappers.UserMapper.*;
+import static com.example.cpuserservice.mappers.UserProfileMapper.*;
 
 
 @Service
@@ -88,20 +87,27 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public Optional<UserProfileResponseDto> getUserProfile(Integer id) {
+    public Optional<UserProfileResponseDto> getUserProfile(Long id) {
 
-        try {
 
-            UserProfile userProfile = userProfileRepository.findUserProfileById(id);
 
-            UserProfileResponseDto userProfileResponse = mapToUserProfileDto(userProfile);
+            UserProfile userProfile = userProfileRepository.findById(id)
+                    .orElseThrow(() -> new UserDoesNotExistException(("User not found")));
+
+            UserProfileResponseDto userProfileResponse = mapToProfileResponseDto(userProfile);
             return Optional.of(userProfileResponse);
 
+    }
 
-        } catch (Exception e) {
+    public UserProfile postUserProfile(UserProfileRequestDto dto) {
 
-            throw new UserDoesNotExistException("Username does not exist", e);
-        }
+        User user = userRepository.findByUsername(dto.getUserSignInDto().getUsername())
+                .orElseThrow(() -> new UserDoesNotExistException("User not found"));
+
+        UserProfile userProfile = mapToUserProfile(dto, new User());
+
+        return userProfileRepository.save(userProfile);
+
     }
 
     public boolean verifyPassword(String rawPassword, String encodedPassword) {

@@ -1,10 +1,7 @@
 package com.example.cpuserservice.controllers;
 
-import com.example.cpuserservice.dtos.UserProfileResponseDto;
-import com.example.cpuserservice.dtos.UserRegistrationResponseDto;
-import com.example.cpuserservice.dtos.UserSignInDto;
+import com.example.cpuserservice.dtos.*;
 import com.example.cpuserservice.exceptions.CustomExceptionHandler;
-import com.example.cpuserservice.dtos.UserRegistrationDto;
 import com.example.cpuserservice.exceptions.UserDoesNotExistException;
 import com.example.cpuserservice.models.User;
 import com.example.cpuserservice.models.UserProfile;
@@ -47,9 +44,17 @@ public class UserController {
     }
 
     @GetMapping("/profile/{id}")
-    public ResponseEntity<UserProfileResponseDto> getUserProfile(@PathVariable Integer id) {
+    public ResponseEntity<UserProfileResponseDto> getUserProfile(@PathVariable Long id) {
         return userService.getUserProfile(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/profile")
+    public ResponseEntity<UserProfile> postUserProfile(@RequestBody UserProfileRequestDto userProfileRequestDto) {
+
+        UserProfile userProfile = userService.postUserProfile(userProfileRequestDto);
+
+        return ResponseEntity.ok(userProfile);
     }
 }

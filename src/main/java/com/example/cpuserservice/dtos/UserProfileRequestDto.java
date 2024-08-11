@@ -5,9 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserProfileResponseDto {
+public class UserProfileRequestDto {
 
-    private UserSignInDto userSignInDto;
+    private  UserSignInDto userSignInDto;
     private String firstName;
     private String lastName;
     private int phoneNumber;
