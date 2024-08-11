@@ -32,15 +32,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserRegistrationResponseDto registerNewUser(UserRegistrationDto userRegistrationDto) {
 
+        log.info("Attempting to register new user with username: {}", userRegistrationDto.getUsername());
+
+        User user = mapToUser(userRegistrationDto, new User());
+
         try {
 
-            log.info("Attempting to register new user with username: {}", userRegistrationDto.getUsername());
-
-            User user = mapToUser(userRegistrationDto, new User());
+            User userResponse = userRepository.save(user);
 
             log.info("Successfully registered new user with username: {}", userRegistrationDto.getUsername());
-
-            User userResponse = userRepository.save(user);
 
             return mapToUserRegistrationResponseDto(userResponse);
 
