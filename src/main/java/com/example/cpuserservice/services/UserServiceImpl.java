@@ -65,26 +65,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> loginUser(UserSignInDto userSignInDto) {
 
-        try {
-            Optional<User> user = userRepository.findByUsername(userSignInDto.getUsername());
-
-            if(user.isPresent()) {
-
-                if (verifyPassword(userSignInDto.getPassword(), user.get().getPasswordHash())) {
-                    return user;
-                } else {
+        User user = userRepository.findByUsername(userSignInDto.getUsername())
+                .orElseThrow(() -> {
                     log.error("Error logging in user with username: {}", userSignInDto.getUsername());
-                    throw new UserDoesNotExistException("Username or password does not exist");
-                }
+                    return new UserDoesNotExistException("Username or password does not exist");
+                });
 
-            }else {
-                log.error("Error logging in user with username: {}", userSignInDto.getUsername());
-                throw new UserDoesNotExistException("Username or password does not exist");
-            }
-        }catch (Exception e) {
-            log.error("Error logging in user with username: {}", userSignInDto.getUsername(), e);
-            throw new UserDoesNotExistException("Username or password does not exist", e);
+        if (verifyPassword(userSignInDto.getPassword(), user.getPasswordHash())) {
+            return Optional.of(user);
+        } else {
+            log.error("Error logging in user with username: {}", userSignInDto.getUsername());
+            throw new UserDoesNotExistException("Username or password does not exist");
         }
+
     }
 
     public Optional<UserProfileResponseDto> getUserProfile(Long id) {
