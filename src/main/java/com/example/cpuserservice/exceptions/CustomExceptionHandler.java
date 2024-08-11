@@ -1,6 +1,7 @@
 package com.example.cpuserservice.exceptions;
 
 import com.example.cpuserservice.dtos.ExceptionDto;
+import org.mule.runtime.core.api.exception.ResourceNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,15 @@ public class CustomExceptionHandler extends Exception {
         });
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserDoesNotExistException.class)
+    public ResponseEntity<ExceptionDto> handlerUserDoesNotExistException(UserDoesNotExistException ex) {
+        ExceptionDto exceptionDto = new ExceptionDto();
+        exceptionDto.setMessage(ex.getMessage());
+        exceptionDto.setErrorDetails(ex.getCause().getMessage());
+        exceptionDto.setTimestamp(LocalDateTime.now());
+        return new ResponseEntity<>(exceptionDto, HttpStatus.NOT_FOUND);
     }
 
     public String getMessage() {

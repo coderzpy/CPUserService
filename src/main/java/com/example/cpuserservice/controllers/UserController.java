@@ -1,9 +1,13 @@
 package com.example.cpuserservice.controllers;
 
+import com.example.cpuserservice.dtos.UserProfileResponseDto;
 import com.example.cpuserservice.dtos.UserRegistrationResponseDto;
+import com.example.cpuserservice.dtos.UserSignInDto;
 import com.example.cpuserservice.exceptions.CustomExceptionHandler;
 import com.example.cpuserservice.dtos.UserRegistrationDto;
+import com.example.cpuserservice.exceptions.UserDoesNotExistException;
 import com.example.cpuserservice.models.User;
+import com.example.cpuserservice.models.UserProfile;
 import com.example.cpuserservice.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -35,4 +39,17 @@ public class UserController {
 
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<User> getUserByUsernameAndPassword(@RequestBody UserSignInDto userSignInDto) throws CustomExceptionHandler, UserDoesNotExistException {
+        return userService.loginUser(userSignInDto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<UserProfileResponseDto> getUserProfile(@PathVariable Integer id) {
+        return userService.getUserProfile(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
